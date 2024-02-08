@@ -6,7 +6,10 @@ program aleooracle.aleo {
         null: bool,
         sig: signature,
         a: address,
-        oracle_price: OraclePrice,
+        price_key: u64,
+        price: u64,
+        decimal: u8,
+        height: u32,
     }
 
     struct OraclePrice {
@@ -22,9 +25,9 @@ program aleooracle.aleo {
     }
 
     function data_checker(oracle_price_data_entry: OraclePriceDataEntry, price_key: u64, decimal: u8, height: u32) {
-        assert_eq(oracle_price_data_entry.oracle_price.price_key, price_key);
-        assert_eq(oracle_price_data_entry.oracle_price.decimal, decimal);
-        assert_eq(oracle_price_data_entry.oracle_price.height, height);
+        assert_eq(oracle_price_data_entry.price_key, price_key);
+        assert_eq(oracle_price_data_entry.decimal, decimal);
+        assert_eq(oracle_price_data_entry.height, height);
     }
 
     // price aggregator, won't be passed onto finalized if the pricing is not the desired price
@@ -49,15 +52,20 @@ program aleooracle.aleo {
             data_checker(price_array[i], price_key, decimal, height);
 
             // Calculate the value for signature verification
-            let v: u64 = price_array[i].oracle_price.price_key + price_array[i].oracle_price.price + price_array[i].oracle_price.height as u64;
+            let oracle_height: u64 = price_array[i].height as u64;
+            let v: u64 = price_array[i].price_key + price_array[i].price;
+            v = v + oracle_height;
             let first: bool = signature::verify(price_array[i].sig, price_array[i].a, v);
             let second: bool = price_array[i].sig.verify(price_array[i].a, v);
 
             // only include the price when the following conditions are met
             // the first and second verification result are the same
             // the data entry is not null (might happen if an oracle node is down)
-            let condition: bool = first.eq(second) == price_array[i].null.eq(true);
-            sum = condition ? sum + price_array[i].oracle_price.price : sum;
+            let condition: bool = first.eq(second);
+            condition = price_array[i].null.eq(false);
+            if (condition.eq(true)) {
+                sum += price_array[i].price;
+            }
             counter = condition ? counter + 1u8 : counter;
         }
 
