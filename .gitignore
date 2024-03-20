@@ -3,3 +3,5 @@
 *.prover
 *.verifier
 outputs/
+
+scripts/export_private_key.sh
