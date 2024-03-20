@@ -12,6 +12,10 @@ To execute this Aleo program, run:
 snarkvm run hello
 ```
 
+## Resources
+- [DokoJS](https://github.com/venture23-aleo/doko-js): Aleo Testing Framework
+- 
+
 ## TODO
 
 Leo Programs:
