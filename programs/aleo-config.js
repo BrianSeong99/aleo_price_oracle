@@ -10,7 +10,12 @@ export default {
       endpoint: 'http://localhost:3030',
       accounts: [
         process.env.ALEO_PRIVATE_KEY_TESTNET3,
-        process.env.ALEO_DEVNET_PRIVATE_KEY2
+        process.env.ALEO_DEVNET_PRIVATE_KEY2,
+        process.env.ALEO_DEVNET_PRIVATE_KEY3,
+        process.env.ALEO_DEVNET_PRIVATE_KEY4,
+        process.env.ALEO_DEVNET_PRIVATE_KEY5,
+        process.env.ALEO_DEVNET_PRIVATE_KEY6,
+        process.env.ALEO_DEVNET_PRIVATE_KEY7,
       ],
       priorityFee: 0.01
     },

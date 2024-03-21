@@ -13,15 +13,19 @@ snarkvm run hello
 ```
 
 ## Resources
+### Tools
 - [DokoJS](https://github.com/venture23-aleo/doko-js): Aleo Testing Framework
-- 
+
+### Papers
+- [TWAP Oracle Attacks: Easier Done than Said?](https://eprint.iacr.org/2022/445.pdf)
 
 ## TODO
 
 Leo Programs:
-- [ ] Basic Version of the Program, capable of collecting prices from 5 whitelisted address
+- [ ] Basic Version of the Program, capable of collecting prices from 8 whitelisted address
 - [ ] Deploy & Test Scripts
 - [ ] Staking Mechanism for the nodes
+- [ ] Fee for Node Providers when price is accepted
 
 Offchain Node Operators:
 - [ ] Sign message including block height, address, price, and pair
