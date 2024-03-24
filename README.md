@@ -19,6 +19,9 @@ snarkvm run hello
 ### Papers
 - [TWAP Oracle Attacks: Easier Done than Said?](https://eprint.iacr.org/2022/445.pdf)
 
+### Talks
+- [Vulnerability on Aleo](https://youtu.be/QRf4Hfxxht4?si=fENm-W7KtCTJaoYd&t=633)
+
 ## TODO
 
 Leo Programs:
@@ -30,3 +33,5 @@ Leo Programs:
 Offchain Node Operators:
 - [ ] Sign message including block height, address, price, and pair
 - [ ] Backend for user's to call when price point is needed
+- [ ] Token Price List
+- [ ] 
