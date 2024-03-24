@@ -4,7 +4,9 @@ import {
   OraclePrice,
   OraclePriceLeo,
   PriceEntry,
-  PriceEntryLeo
+  PriceEntryLeo,
+  PriceArrayStruct,
+  PriceArrayStructLeo
 } from "../types/oracle";
 import {
   js2leo
@@ -15,8 +17,8 @@ export function getOraclePriceDataEntryLeo(oraclePriceDataEntry: OraclePriceData
   const result: OraclePriceDataEntryLeo = {
     null: js2leo.boolean(oraclePriceDataEntry.null),
     sig: js2leo.signature(oraclePriceDataEntry.sig),
-    a: js2leo.address(oraclePriceDataEntry.a),
-    price_key: js2leo.u64(oraclePriceDataEntry.price_key),
+    addr: js2leo.address(oraclePriceDataEntry.addr),
+    token_price_id: js2leo.u64(oraclePriceDataEntry.token_price_id),
     price: js2leo.u64(oraclePriceDataEntry.price),
     decimal: js2leo.u8(oraclePriceDataEntry.decimal),
     height: js2leo.u32(oraclePriceDataEntry.height),
@@ -26,7 +28,7 @@ export function getOraclePriceDataEntryLeo(oraclePriceDataEntry: OraclePriceData
 
 export function getOraclePriceLeo(oraclePrice: OraclePrice): OraclePriceLeo {
   const result: OraclePriceLeo = {
-    price_key: js2leo.u64(oraclePrice.price_key),
+    token_price_id: js2leo.u64(oraclePrice.token_price_id),
     price: js2leo.u64(oraclePrice.price),
     decimal: js2leo.u8(oraclePrice.decimal),
     height: js2leo.u32(oraclePrice.height),
@@ -38,6 +40,20 @@ export function getPriceEntryLeo(priceEntry: PriceEntry): PriceEntryLeo {
   const result: PriceEntryLeo = {
     price: js2leo.u64(priceEntry.price),
     decimal: js2leo.u8(priceEntry.decimal),
+  }
+  return result;
+}
+
+export function getPriceArrayStructLeo(priceArrayStruct: PriceArrayStruct): PriceArrayStructLeo {
+  const result: PriceArrayStructLeo = {
+    p0: getPriceEntryLeo(priceArrayStruct.p0),
+    p1: getPriceEntryLeo(priceArrayStruct.p1),
+    p2: getPriceEntryLeo(priceArrayStruct.p2),
+    p3: getPriceEntryLeo(priceArrayStruct.p3),
+    p4: getPriceEntryLeo(priceArrayStruct.p4),
+    p5: getPriceEntryLeo(priceArrayStruct.p5),
+    p6: getPriceEntryLeo(priceArrayStruct.p6),
+    p7: getPriceEntryLeo(priceArrayStruct.p7),
   }
   return result;
 }

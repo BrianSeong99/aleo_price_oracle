@@ -48,11 +48,12 @@ program oracle.aleo {
 
     // `update_bitmap_index`: used to mimic boolean array / bitmap
     function update_bitmap_index(bitmap: u64, index: u8, value: bool) -> u64 {
+        let bitmap_index: u64 = 1u64 << index;
         if index < 8u8 {
             if value {
-                bitmap = bitmap.or(1u64 << (index as u64));
+                bitmap = bitmap.or(bitmap_index);
             } else {
-                bitmap = bitmap.and(1u64 << (index as u64));
+                bitmap = bitmap.and(bitmap_index);
             }
         }
         return bitmap;
@@ -60,7 +61,8 @@ program oracle.aleo {
 
     function get_bitmap_index_value(bitmap: u64, index: u8) -> bool {
         // TODO Should we check the index over range?
-        return bitmap & (1u64 << (index as u64)) != 0u64;
+        let bitmap_index: u64 = 1u64 << index;
+        return bitmap & bitmap_index != 0u64;
     }
 
     // price aggregator, won't be passed onto finalized if the pricing is not the desired price

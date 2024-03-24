@@ -25,8 +25,8 @@ import {
 export interface OraclePriceDataEntry {
   null: boolean;
   sig: string;
-  a: LeoAddress;
-  price_key: bigint;
+  addr: LeoAddress;
+  token_price_id: bigint;
   price: bigint;
   decimal: number;
   height: number;
@@ -35,8 +35,8 @@ export interface OraclePriceDataEntry {
 export const leoOraclePriceDataEntrySchema = z.object({
   null: leoBooleanSchema,
   sig: leoSignatureSchema,
-  a: leoAddressSchema,
-  price_key: leoU64Schema,
+  addr: leoAddressSchema,
+  token_price_id: leoU64Schema,
   price: leoU64Schema,
   decimal: leoU8Schema,
   height: leoU32Schema,
@@ -44,14 +44,14 @@ export const leoOraclePriceDataEntrySchema = z.object({
 export type OraclePriceDataEntryLeo = z.infer < typeof leoOraclePriceDataEntrySchema > ;
 
 export interface OraclePrice {
-  price_key: bigint;
+  token_price_id: bigint;
   price: bigint;
   decimal: number;
   height: number;
 }
 
 export const leoOraclePriceSchema = z.object({
-  price_key: leoU64Schema,
+  token_price_id: leoU64Schema,
   price: leoU64Schema,
   decimal: leoU8Schema,
   height: leoU32Schema,
@@ -68,3 +68,26 @@ export const leoPriceEntrySchema = z.object({
   decimal: leoU8Schema,
 });
 export type PriceEntryLeo = z.infer < typeof leoPriceEntrySchema > ;
+
+export interface PriceArrayStruct {
+  p0: PriceEntry;
+  p1: PriceEntry;
+  p2: PriceEntry;
+  p3: PriceEntry;
+  p4: PriceEntry;
+  p5: PriceEntry;
+  p6: PriceEntry;
+  p7: PriceEntry;
+}
+
+export const leoPriceArrayStructSchema = z.object({
+  p0: leoPriceEntrySchema,
+  p1: leoPriceEntrySchema,
+  p2: leoPriceEntrySchema,
+  p3: leoPriceEntrySchema,
+  p4: leoPriceEntrySchema,
+  p5: leoPriceEntrySchema,
+  p6: leoPriceEntrySchema,
+  p7: leoPriceEntrySchema,
+});
+export type PriceArrayStructLeo = z.infer < typeof leoPriceArrayStructSchema > ;
