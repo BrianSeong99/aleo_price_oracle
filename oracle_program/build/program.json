@@ -1,5 +1,5 @@
 {
-    "program": "credits.aleo",
+    "program": "oracle_program.aleo",
     "version": "0.0.0",
     "description": "",
     "license": "MIT"

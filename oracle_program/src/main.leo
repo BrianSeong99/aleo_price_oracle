@@ -1,6 +1,6 @@
 import credits.leo;
 
-program oracle.aleo {
+program oracle_program.aleo {
     
     /* ----------------- oracle service ----------------- */
 
@@ -205,12 +205,12 @@ program oracle.aleo {
     }
 
     // only callable by admin
-    transition add_node_operator_to_whitelist(node_addr: address) {
+    transition add_node_to_whitelist(node_addr: address) {
         assert_eq(self.caller, admin);
         return then finalize(node_addr);
     }
 
-    finalize add_node_operator_to_whitelist(node_addr: address) {
+    finalize add_node_to_whitelist(node_addr: address) {
         let oracle_node: OracleNode = Mapping::get_or_use(oracle_nodes, node_addr, OracleNode{
             addr: node_addr,
             status: 1u8,
@@ -220,12 +220,12 @@ program oracle.aleo {
     }
 
     // only callable by admin
-    transition ban_node_operator_from_whitelist(node_addr: address) {
+    transition ban_node_from_whitelist(node_addr: address) {
         assert_eq(self.caller, admin);
         return then finalize(node_addr);
     }
 
-    finalize ban_node_operator_from_whitelist(node_addr: address) {
+    finalize ban_node_from_whitelist(node_addr: address) {
         let oracle_node: OracleNode = Mapping::get_or_use(oracle_nodes, node_addr, OracleNode{
             addr: node_addr,
             status: 3u8,
@@ -233,8 +233,8 @@ program oracle.aleo {
         Mapping::set(oracle_nodes, node_addr, oracle_node);
     }
 
-    function is_node_operator_valid(node_addr: address) {
-        let is_contain: bool = Mapping::contains(oracle_nodes, node_addr);
-    }
+    // function is_node_operator_valid(node_addr: address) {
+    //     let is_contain: bool = Mapping::contains(oracle_nodes, node_addr);
+    // }
 
 }

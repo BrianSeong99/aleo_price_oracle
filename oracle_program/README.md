@@ -1,4 +1,4 @@
-# oracle.aleo
+# oracle_program.aleo
 
 ## Build Guide
 
