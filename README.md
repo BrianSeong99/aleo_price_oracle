@@ -22,6 +22,14 @@ snarkvm run hello
 ### Talks
 - [Vulnerability on Aleo](https://youtu.be/QRf4Hfxxht4?si=fENm-W7KtCTJaoYd&t=633)
 
+## Blogs
+- [HyperOracle](https://mirror.xyz/orablog.eth/qbefsToFgFxBZBocwlkX-HXbpeUzZiv2UB5CmxcaFTM)
+- [zk Co-processor by Axiom](https://blog.axiom.xyz/what-is-a-zk-coprocessor/)
+- [Chainlink Price Expensive](https://cointelegraph.com/news/band-protocol-ceo-says-that-a-single-chainlink-data-request-costs-450)
+
+### Code
+- [Aleo Credits Source Code](https://github.com/AleoHQ/snarkVM/blob/testnet3/synthesizer/program/src/resources/credits.aleo)
+
 ## TODO
 
 Leo Programs:

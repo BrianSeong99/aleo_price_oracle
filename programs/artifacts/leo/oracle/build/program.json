@@ -1,6 +1,1 @@
-{
-    "program": "oracle.aleo",
-    "version": "0.0.0",
-    "description": "",
-    "license": "MIT"
-}
+{"program":"oracle.aleo","version":"0.0.0","description":"","license":"MIT","dependencies":[{"name":"credits.leo","location":"network","endpoint":"http://localhost:3030","network":"testnet3"}]}

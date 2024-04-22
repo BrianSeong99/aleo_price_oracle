@@ -1,4 +1,4 @@
-# sample_program.aleo
+# credits.aleo
 
 ## Build Guide
 

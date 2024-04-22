@@ -1,7 +1,13 @@
-// The 'aleooracle' program.
+import credits.leo;
+
 program oracle.aleo {
-    mapping price_quote: u64 => PriceEntry;
+    
+    /* ----------------- oracle service ----------------- */
+
     const num_of_entries: u8 = 8u8;
+
+    // Price Quote mapping, callable by other contracts
+    mapping price_quote: u64 => PriceEntry;
 
     // `OraclePriceDataEntry`: this is the data passed from the oracle.
     struct OraclePriceDataEntry {
@@ -26,18 +32,6 @@ program oracle.aleo {
     struct PriceEntry {
         price: u64,
         decimal: u8
-    }
-
-    // `PriceArrayStruct`: this is the struct for store price data dynamically, can't use array since array in leo lang is static
-    struct PriceArrayStruct {
-        p0: PriceEntry,
-        p1: PriceEntry,
-        p2: PriceEntry,
-        p3: PriceEntry,
-        p4: PriceEntry,
-        p5: PriceEntry,
-        p6: PriceEntry,
-        p7: PriceEntry,
     }
 
     function data_checker(oracle_price_data_entry: OraclePriceDataEntry, token_price_id: u64, decimal: u8, height: u32) {
@@ -146,19 +140,101 @@ program oracle.aleo {
         let diviation: u64 = aggregated_price.gt(desired_price) ? aggregated_price.sub(desired_price) : desired_price.sub(aggregated_price);
         assert(price_diviation_allowance.gt(diviation));
 
+        let oracle_node_addrs: [address; 8] = [
+            price_array[0u8].addr,
+            price_array[1u8].addr,
+            price_array[2u8].addr,
+            price_array[3u8].addr,
+            price_array[4u8].addr,
+            price_array[5u8].addr,
+            price_array[6u8].addr,
+            price_array[7u8].addr,
+        ];
+
         return then finalize(OraclePrice {
             token_price_id: token_price_id,
             price: aggregated_price,
             decimal: decimal,
             height: height
-        });
+        }, oracle_node_addrs);
     }
 
-    finalize price_aggregator(oracle_price: OraclePrice) {
-        assert_eq(oracle_price.height, block.height); // might need to check should it be block.height + 1 or just block.height
+    finalize price_aggregator(oracle_price: OraclePrice, oracle_node_addrs: [address; 8]) {
+        // might need to check should it be block.height + 1 or just block.height
+        assert_eq(oracle_price.height, block.height);
+
+        // check if all node_operators are still valid
+        // distribute incentives to all oracle nodes
+        for i: u8 in 0u8..8u8 {
+            assert(Mapping::contains(oracle_nodes, oracle_node_addrs[i]));
+            let oracle_node: OracleNode = Mapping::get(oracle_nodes, oracle_node_addrs[i]);
+            assert_neq(oracle_node.status, 3u8);
+            // TODO distribute incentives to price providers
+        }
+
+
         Mapping::set(price_quote, oracle_price.token_price_id, PriceEntry {
             price: oracle_price.price,
             decimal: oracle_price.decimal,
         });
     }
+
+    /* ----------------- oracle node manager ----------------- */
+    
+    // program admin
+    const admin: address = aleo1qgf9yps4vns0mkqxm8vlv607k8k4vdkqjjqttf4e25lwuwnxxsyq7rmczy;
+
+    // Oracle nodes whitelist mapping.
+    mapping oracle_nodes: address => OracleNode;
+    // Total value of all stakes
+    mapping total_staked_value: field => u64;
+
+    // 0u8 is unregisterred, 
+    // 1u8 is registerred but not staked, 
+    // 2u8 is registerred and staked, 
+    // 3u8 is registerred and staked but slashed / banned
+    struct OracleNode {
+        addr: address,
+        status: u8, 
+    }
+
+    // OracleNodeStakeNFT: proof of stake for node operators.
+    record OracleNodeStakeNFT {
+        owner: address,
+        balance: u64,
+    }
+
+    // only callable by admin
+    transition add_node_operator_to_whitelist(node_addr: address) {
+        assert_eq(self.caller, admin);
+        return then finalize(node_addr);
+    }
+
+    finalize add_node_operator_to_whitelist(node_addr: address) {
+        let oracle_node: OracleNode = Mapping::get_or_use(oracle_nodes, node_addr, OracleNode{
+            addr: node_addr,
+            status: 1u8,
+        });
+        assert_neq(oracle_node.status, 3u8);
+        Mapping::set(oracle_nodes, node_addr, oracle_node);
+    }
+
+    // only callable by admin
+    transition ban_node_operator_from_whitelist(node_addr: address) {
+        assert_eq(self.caller, admin);
+        return then finalize(node_addr);
+    }
+
+    finalize ban_node_operator_from_whitelist(node_addr: address) {
+        let oracle_node: OracleNode = Mapping::get_or_use(oracle_nodes, node_addr, OracleNode{
+            addr: node_addr,
+            status: 3u8,
+        });
+        Mapping::set(oracle_nodes, node_addr, oracle_node);
+    }
+
+    function is_node_operator_valid(node_addr: address) {
+        let is_contain: bool = Mapping::contains(oracle_nodes, node_addr);
+    }
+
 }

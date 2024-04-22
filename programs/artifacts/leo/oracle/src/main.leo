@@ -1,7 +1,23 @@
-// The 'aleooracle' program.
+import credits.leo;
+
 program oracle.aleo {
-    mapping price_quote: u64 => PriceEntry;
+    
     const num_of_entries: u8 = 8u8;
+
+    // Price Quote mapping, callable by other contracts
+    mapping price_quote: u64 => PriceEntry;
+
+    // Oracle nodes whitelist mapping.
+    mapping oracle_nodes: address => u64;
+
+    // program owner
+    const owner: address = aleo1qgf9yps4vns0mkqxm8vlv607k8k4vdkqjjqttf4e25lwuwnxxsyq7rmczy;
+
+    // OracleNodeStakeNFT: proof of stake for node operators.
+    record OracleNodeStakeNFT {
+        owner: address,
+        balance: u64,
+    }
 
     // `OraclePriceDataEntry`: this is the data passed from the oracle.
     struct OraclePriceDataEntry {
@@ -63,6 +79,10 @@ program oracle.aleo {
         // TODO Should we check the index over range?
         let bitmap_index: u64 = 1u64 << index;
         return bitmap & bitmap_index != 0u64;
+    }
+
+    transition add_node_operator(node_addr: address, stake_amount: u64) {
+
     }
 
     // price aggregator, won't be passed onto finalized if the pricing is not the desired price
